@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "fp.yeyu.mcstructures.biomestructures.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
