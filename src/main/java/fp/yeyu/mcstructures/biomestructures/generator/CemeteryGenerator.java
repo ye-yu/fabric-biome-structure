@@ -1,7 +1,6 @@
 package fp.yeyu.mcstructures.biomestructures.generator;
 
 import fp.yeyu.mcstructures.biomestructures.BiomeStructures;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.structure.SimpleStructurePiece;
 import net.minecraft.structure.Structure;
@@ -9,15 +8,8 @@ import net.minecraft.structure.StructureManager;
 import net.minecraft.structure.StructurePiece;
 import net.minecraft.structure.StructurePlacementData;
 import net.minecraft.structure.processor.BlockIgnoreStructureProcessor;
-import net.minecraft.text.ClickEvent;
-import net.minecraft.text.HoverEvent;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
-import net.minecraft.text.Texts;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockBox;
 import net.minecraft.util.math.BlockPos;
@@ -32,18 +24,24 @@ import org.apache.logging.log4j.Logger;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 public class CemeteryGenerator implements Generator {
     public static final float CHANCE = 0.4f;
     private static final Logger LOGGER = LogManager.getLogger();
 
     public static void addPieces(StructureManager manager, int x, int z, List<StructurePiece> pieces, Random random, DefaultFeatureConfig defaultConfig) {
-        if (random.nextFloat() < CHANCE) {
-            final Piece cemetery = new Piece(manager, x, z, BiomeStructures.constructIdentifier("cemetery"));
-            pieces.add(cemetery);
-
-        }
+        IntStream.range(0, random.nextInt(7) + 3).forEach(e -> {
+            if (random.nextFloat() < CHANCE) {
+                final int row = 10;
+                final int distance = 5;
+                final int noise = 3;
+                final Piece cemetery = new Piece(manager, x + distance * (e % row) + random.nextInt(noise), z + distance * (e / row) + random.nextInt(noise), BiomeStructures.constructIdentifier("cemetery"));
+                pieces.add(cemetery);
+            } else {
+                LOGGER.info(String.format("Rejected generation in %d ~ %d", x, z));
+            }
+        });
     }
 
     public static class Piece extends SimpleStructurePiece {

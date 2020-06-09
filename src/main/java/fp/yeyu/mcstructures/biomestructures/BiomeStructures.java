@@ -60,10 +60,7 @@ public class BiomeStructures implements ModInitializer {
         for(Biome biome : Registry.BIOME) {
             if(biome.getCategory() != Biome.Category.OCEAN && biome.getCategory() != Biome.Category.RIVER) {
                 biome.addStructureFeature((Features.CEMETERY.getStructure()).configure(new DefaultFeatureConfig()));
-                biome.addFeature(
-                        GenerationStep.Feature.SURFACE_STRUCTURES,
-                        Features.CEMETERY.getFeature().configure(FeatureConfig.DEFAULT).createDecoratedFeature(
-                                Decorator.CHANCE_HEIGHTMAP_DOUBLE.configure(new ChanceDecoratorConfig(0))));
+                biome.addFeature(GenerationStep.Feature.SURFACE_STRUCTURES, Features.CEMETERY.getFeature().configure(FeatureConfig.DEFAULT).createDecoratedFeature(Decorator.CHANCE_PASSTHROUGH.configure(new ChanceDecoratorConfig(0))));
             }
         }
     }
