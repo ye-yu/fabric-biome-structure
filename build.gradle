@@ -14,6 +14,9 @@ minecraft {
 }
 
 dependencies {
+    compile group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.0'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.13.3'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.13.3'
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
@@ -45,6 +48,7 @@ tasks.withType(JavaCompile) {
 // if it is present.
 // If you remove this task, sources will not be generated.
 task sourcesJar(type: Jar, dependsOn: classes) {
+    //noinspection GrDeprecatedAPIUsage
     classifier = "sources"
     from sourceSets.main.allSource
 }
@@ -53,23 +57,23 @@ jar {
     from "LICENSE"
 }
 
-// configure the maven publication
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            // add all the jars that should be included when publishing to maven
-            artifact(remapJar) {
-                builtBy remapJar
-            }
-            artifact(sourcesJar) {
-                builtBy remapSourcesJar
-            }
-        }
-    }
-
-    // select the repositories you want to publish to
-    repositories {
-        // uncomment to publish to the local maven
-        // mavenLocal()
-    }
-}
+//// configure the maven publication
+//publishing {
+//    publications {
+//        mavenJava(MavenPublication) {
+//            // add all the jars that should be included when publishing to maven
+//            artifact(remapJar) {
+//                builtBy remapJar
+//            }
+//            artifact(sourcesJar) {
+//                builtBy remapSourcesJar
+//            }
+//        }
+//    }
+//
+//    // select the repositories you want to publish to
+//    repositories {
+//        // uncomment to publish to the local maven
+//        // mavenLocal()
+//    }
+//}

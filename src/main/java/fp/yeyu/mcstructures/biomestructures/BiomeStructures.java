@@ -1,12 +1,13 @@
 package fp.yeyu.mcstructures.biomestructures;
 
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.world.gen.feature.ShipwreckFeature;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class BiomeStructures implements ModInitializer {
+    private static final Logger LOGGER = LogManager.getLogger();
     @Override
     public void onInitialize() {
-        ShipwreckFeature
-
+        LOGGER.info("Mod is loaded.");
     }
 }
