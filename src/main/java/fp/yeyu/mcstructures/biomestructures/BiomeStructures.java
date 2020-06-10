@@ -40,11 +40,13 @@ public class BiomeStructures implements ModInitializer {
 
         private final StructureFeature<DefaultFeatureConfig> feature;
         private final StructureFeature<DefaultFeatureConfig> structure;
+        private final StructurePieceType structurePiece;
 
         Features(Identifier featureId, Identifier structureId, String structureName, StructureFeature<DefaultFeatureConfig> entry) {
             feature = Registry.register(Registry.FEATURE, featureId, entry);
             structure = Registry.register(Registry.STRUCTURE_FEATURE, structureId, entry);
             Feature.STRUCTURES.put(structureName, entry);
+            this.structurePiece = Registry.register(Registry.STRUCTURE_PIECE, structureId, CemeteryGenerator.Piece::new);
         }
 
         public StructureFeature<DefaultFeatureConfig> getFeature() {

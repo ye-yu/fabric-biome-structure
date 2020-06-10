@@ -32,14 +32,14 @@ public class CemeteryGenerator implements Generator {
 
     public static void addPieces(StructureManager manager, int x, int z, List<StructurePiece> pieces, Random random, DefaultFeatureConfig defaultConfig) {
         IntStream.range(0, random.nextInt(7) + 3).forEach(e -> {
+            final int row = 10;
+            final int distance = 5;
+            final int noise = 3;
             if (random.nextFloat() < CHANCE) {
-                final int row = 10;
-                final int distance = 5;
-                final int noise = 3;
                 final Piece cemetery = new Piece(manager, x + distance * (e % row) + random.nextInt(noise), z + distance * (e / row) + random.nextInt(noise), BiomeStructures.constructIdentifier("cemetery"));
                 pieces.add(cemetery);
             } else {
-                LOGGER.info(String.format("Rejected generation in %d ~ %d", x, z));
+                LOGGER.info(String.format("Rejected generation in %d ~ %d", x + distance * (e % row), z + distance * (e / row)));
             }
         });
     }
