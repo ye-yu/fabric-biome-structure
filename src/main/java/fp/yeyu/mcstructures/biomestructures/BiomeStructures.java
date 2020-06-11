@@ -12,7 +12,6 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.decorator.ChanceDecoratorConfig;
 import net.minecraft.world.gen.decorator.Decorator;
-import net.minecraft.world.gen.decorator.EmeraldOreDecorator;
 import net.minecraft.world.gen.decorator.NopeDecoratorConfig;
 import net.minecraft.world.gen.feature.DefaultFeatureConfig;
 import net.minecraft.world.gen.feature.Feature;
@@ -30,12 +29,12 @@ public class BiomeStructures implements ModInitializer {
             if (biome.getCategory() != Biome.Category.OCEAN && biome.getCategory() != Biome.Category.RIVER) {
 
                 // add cemetery
-                biome.addStructureFeature((Structures.CEMETERY.getStructure()).configure(FeatureConfig.DEFAULT));
-                biome.addFeature(GenerationStep.Feature.SURFACE_STRUCTURES, Structures.CEMETERY.getFeature().configure(FeatureConfig.DEFAULT).createDecoratedFeature(Decorator.NOPE.configure(new NopeDecoratorConfig())));
+                biome.addStructureFeature(Structures.CEMETERY.getStructure().configure(FeatureConfig.DEFAULT));
+                biome.addFeature(GenerationStep.Feature.SURFACE_STRUCTURES, Structures.CEMETERY.getFeature().configure(FeatureConfig.DEFAULT).createDecoratedFeature(Decorator.CHANCE_PASSTHROUGH.configure(new ChanceDecoratorConfig(0))));
 
                 // add tomb
                 biome.addStructureFeature((Structures.TOMB.getStructure()).configure(FeatureConfig.DEFAULT));
-                biome.addFeature(GenerationStep.Feature.UNDERGROUND_ORES, Structures.TOMB.getFeature().configure(FeatureConfig.DEFAULT).createDecoratedFeature(Decorator.NOPE.configure(new NopeDecoratorConfig())));
+                biome.addFeature(GenerationStep.Feature.SURFACE_STRUCTURES, Structures.TOMB.getFeature().configure(FeatureConfig.DEFAULT).createDecoratedFeature(Decorator.CHANCE_PASSTHROUGH.configure(new ChanceDecoratorConfig(0))));
             }
         }
     }
