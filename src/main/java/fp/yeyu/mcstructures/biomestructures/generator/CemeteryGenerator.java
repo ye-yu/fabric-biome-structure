@@ -48,7 +48,7 @@ public class CemeteryGenerator implements Generator {
         private final Identifier id;
 
         public Piece(StructureManager structureManager, int x, int z, Identifier identifier) {
-            super(BiomeStructures.Generators.CEMETERY.getGenerator(), 0);
+            super(BiomeStructures.Structures.CEMETERY.getGenerator(), 0);
             this.set2dPosition(x, z);
             this.id = identifier;
             this.setStructureData(structureManager);
