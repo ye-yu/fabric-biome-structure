@@ -31,11 +31,11 @@ public class BiomeStructures implements ModInitializer {
 
                 // add cemetery
                 biome.addStructureFeature((Structures.CEMETERY.getStructure()).configure(FeatureConfig.DEFAULT));
-                biome.addFeature(GenerationStep.Feature.SURFACE_STRUCTURES, Structures.CEMETERY.getFeature().configure(FeatureConfig.DEFAULT).createDecoratedFeature(Decorator.NOPE.configure(new NopeDecoratorConfig())));
+                biome.addFeature(GenerationStep.Feature.SURFACE_STRUCTURES, Structures.CEMETERY.getFeature().configure(FeatureConfig.DEFAULT).createDecoratedFeature(Decorator.CHANCE_PASSTHROUGH.configure(new ChanceDecoratorConfig(1))));
 
                 // add tomb
                 biome.addStructureFeature((Structures.TOMB.getStructure()).configure(FeatureConfig.DEFAULT));
-                biome.addFeature(GenerationStep.Feature.UNDERGROUND_ORES, Structures.TOMB.getFeature().configure(FeatureConfig.DEFAULT).createDecoratedFeature(Decorator.NOPE.configure(new NopeDecoratorConfig())));
+                biome.addFeature(GenerationStep.Feature.UNDERGROUND_STRUCTURES, Structures.TOMB.getFeature().configure(FeatureConfig.DEFAULT).createDecoratedFeature(Decorator.CHANCE_PASSTHROUGH.configure(new ChanceDecoratorConfig(1))));
             }
         }
     }
