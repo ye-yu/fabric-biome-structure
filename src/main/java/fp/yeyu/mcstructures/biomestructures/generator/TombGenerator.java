@@ -1,7 +1,11 @@
 package fp.yeyu.mcstructures.biomestructures.generator;
 
 import fp.yeyu.mcstructures.biomestructures.BiomeStructures;
+import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.MobSpawnerBlockEntity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.structure.SimpleStructurePiece;
 import net.minecraft.structure.Structure;
@@ -23,12 +27,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public class TombGenerator {
     public static final Identifier id = BiomeStructures.constructIdentifier("tomb");
     // 3926815997070620247
-    // 21 ~ -344
+    // 80 23 -224
     private static final Logger LOGGER = LogManager.getLogger();
 
     public static void addParts(StructureManager structureManager, BlockPos blockPos, BlockRotation rotation, List<StructurePiece> list_1, Random random, DefaultFeatureConfig defaultFeatureConfig) {
@@ -131,10 +136,49 @@ public class TombGenerator {
             }
         }
 
+        private static final String FLOWER_POT = "flower_pot";
+        private static final String CHEST = "chest";
+        private static final String SPAWNER = "spawner";
+        private static final Block[] FLOWERS = new Block[]{
+                Blocks.POTTED_ALLIUM,
+                Blocks.POTTED_AZURE_BLUET,
+                Blocks.POTTED_BROWN_MUSHROOM,
+                Blocks.POTTED_CORNFLOWER,
+                Blocks.POTTED_LILY_OF_THE_VALLEY};
 
+        private static final EntityType<?>[] MOB_SPAWNER_ENTITIES = new EntityType[]{
+                EntityType.SKELETON,
+                EntityType.ZOMBIE,
+                EntityType.SPIDER,
+                EntityType.WITCH,
+                EntityType.ENDERMAN
+        };
+
+        private Integer spawnerType;
         @Override
         protected void handleMetadata(String metadata, BlockPos pos, IWorld world, Random random, BlockBox boundingBox) {
-            LOGGER.info(String.format("Procesing %s", metadata));
+            if (Objects.isNull(spawnerType)) {
+                spawnerType = random.nextInt(FLOWERS.length);
+            }
+            if (metadata.equalsIgnoreCase(FLOWER_POT)) {
+                world.setBlockState(pos, FLOWERS[spawnerType].getDefaultState(), 3);
+                return;
+            }
+
+            if (metadata.equalsIgnoreCase(CHEST)) {
+                world.setBlockState(pos, Blocks.CHEST.getDefaultState(), 3);
+                return;
+            }
+
+            if (metadata.equalsIgnoreCase(SPAWNER)) {
+                world.setBlockState(pos, Blocks.SPAWNER.getDefaultState(), 3);
+                final BlockEntity blockEntity = world.getBlockEntity(pos);
+                if (blockEntity instanceof MobSpawnerBlockEntity) {
+                    ((MobSpawnerBlockEntity)blockEntity).getLogic().setEntityId(MOB_SPAWNER_ENTITIES[spawnerType]);
+                } else {
+                    LOGGER.error("Failed to fetch mob spawner entity at ({}, {}, {})", pos.getX(), pos.getY(), pos.getZ());
+                }
+            }
         }
     }
 }
