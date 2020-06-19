@@ -1,6 +1,7 @@
 package fp.yeyu.mcstructures.biomestructures.generator;
 
 import fp.yeyu.mcstructures.biomestructures.BiomeStructures;
+import net.minecraft.block.Blocks;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.structure.SimpleStructurePiece;
 import net.minecraft.structure.Structure;
@@ -25,7 +26,8 @@ import java.util.List;
 import java.util.Random;
 
 public class TombGenerator {
-
+    // 3926815997070620247
+    // 21 ~ -344
     private static final Logger LOGGER = LogManager.getLogger();
     public static final Identifier id = BiomeStructures.constructIdentifier("tomb");
 
@@ -65,10 +67,70 @@ public class TombGenerator {
         @Override
         public boolean generate(IWorld world, ChunkGenerator<?> generator, Random random, BlockBox box, ChunkPos pos) {
             int yHeight = world.getTopY(Heightmap.Type.WORLD_SURFACE_WG, this.pos.getX() + 8, this.pos.getZ() + 8);
-            this.pos = this.pos.add(0, yHeight - 1, 0);
+            final int structureHeight = this.boundingBox.maxY - this.boundingBox.minY;
+            final int offset = 0;
+
+            this.pos = this.pos.add(0, yHeight <= (structureHeight + offset) ? offset : random.nextInt(yHeight - structureHeight - offset) + offset, 0);
             LOGGER.info(String.format("Generated tomb at %d %d %d", this.pos.getX(), this.pos.getY(), this.pos.getZ()));
-            return  super.generate(world, generator, random, box, pos);
+            if (super.generate(world, generator, random, box, pos)) {
+                replaceRightStoneWallsWithAir(world);
+                replaceLeftStoneWallsWithAir(world);
+                replaceTopStoneRoofsWithAir(world);
+                return true;
+            }
+            return false;
         }
+
+        private void replaceTopStoneRoofsWithAir(IWorld world) {
+            final int height = this.boundingBox.maxY - this.boundingBox.minY;
+            final int width = this.boundingBox.maxX - this.boundingBox.minX;
+            final int breadth = this.boundingBox.maxZ - this.boundingBox.minZ;
+
+            final int y = this.pos.getY() + height;
+
+            for(int x = this.pos.getX(); x <= this.pos.getX() + width; x++) {
+                for(int z = this.pos.getZ(); z <= this.pos.getZ() + breadth; z++) {
+                    final BlockPos blockPos = new BlockPos(x, y, z);
+                    if (!world.getBlockState(blockPos.add(0, 1, 0)).isAir()) continue;
+                    world.setBlockState(blockPos, Blocks.CAVE_AIR.getDefaultState(), 3);
+                    world.setBlockState(blockPos.add(0, -1, 0), Blocks.CAVE_AIR.getDefaultState(), 3);
+                }
+            }
+
+        }
+
+        private void replaceLeftStoneWallsWithAir(IWorld world) {
+            final int height = this.boundingBox.maxY - this.boundingBox.minY;
+            final int width = this.boundingBox.maxX - this.boundingBox.minX;
+            final int breadth = this.boundingBox.maxZ - this.boundingBox.minZ;
+
+            final int x = this.pos.getX() + width;
+
+            for(int z = this.pos.getZ(); z <= this.pos.getZ() + breadth; z++) {
+                for(int y = this.pos.getY(); y <= this.pos.getY() + height; y++) {
+                    final BlockPos blockPos = new BlockPos(x, y, z);
+                    if (!world.getBlockState(blockPos.add(1, 0, 0)).isAir()) continue;
+                    world.setBlockState(blockPos, Blocks.CAVE_AIR.getDefaultState(), 3);
+                }
+            }
+        }
+
+        private void replaceRightStoneWallsWithAir(IWorld world) {
+            final int height = this.boundingBox.maxY - this.boundingBox.minY;
+            final int width = this.boundingBox.maxX - this.boundingBox.minX;
+            final int breadth = this.boundingBox.maxZ - this.boundingBox.minZ;
+
+            final int x = this.pos.getX();
+
+            for(int z = this.pos.getZ(); z <= this.pos.getZ() + breadth; z++) {
+                for(int y = this.pos.getY(); y <= this.pos.getY() + height; y++) {
+                    final BlockPos blockPos = new BlockPos(x, y, z);
+                    if (!world.getBlockState(blockPos.add(-1, 0, 0)).isAir()) continue;
+                    world.setBlockState(blockPos, Blocks.CAVE_AIR.getDefaultState(), 3);
+                }
+            }
+        }
+
 
         @Override
         protected void handleMetadata(String metadata, BlockPos pos, IWorld world, Random random, BlockBox boundingBox) {
