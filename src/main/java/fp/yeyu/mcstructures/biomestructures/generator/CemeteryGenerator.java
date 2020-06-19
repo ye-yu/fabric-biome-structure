@@ -33,6 +33,8 @@ public class CemeteryGenerator implements Generator {
     public static final float CHANCE = 0.4f;
     private static final Logger LOGGER = LogManager.getLogger();
 
+    // 5503660288187982184
+    // 373 90 625
     public static void addPieces(StructureManager manager, int x, int z, List<StructurePiece> pieces, Random random, DefaultFeatureConfig defaultConfig) {
         IntStream.range(0, random.nextInt(7) + 3).forEach(e -> {
             final int row = 10;
