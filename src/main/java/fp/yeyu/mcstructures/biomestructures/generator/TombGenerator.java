@@ -26,10 +26,10 @@ import java.util.List;
 import java.util.Random;
 
 public class TombGenerator {
+    public static final Identifier id = BiomeStructures.constructIdentifier("tomb");
     // 3926815997070620247
     // 21 ~ -344
     private static final Logger LOGGER = LogManager.getLogger();
-    public static final Identifier id = BiomeStructures.constructIdentifier("tomb");
 
     public static void addParts(StructureManager structureManager, BlockPos blockPos, BlockRotation rotation, List<StructurePiece> list_1, Random random, DefaultFeatureConfig defaultFeatureConfig) {
         list_1.add(new Piece(structureManager, id, blockPos, rotation));
@@ -88,8 +88,8 @@ public class TombGenerator {
 
             final int y = this.pos.getY() + height;
 
-            for(int x = this.pos.getX(); x <= this.pos.getX() + width; x++) {
-                for(int z = this.pos.getZ(); z <= this.pos.getZ() + breadth; z++) {
+            for (int x = this.pos.getX(); x <= this.pos.getX() + width; x++) {
+                for (int z = this.pos.getZ(); z <= this.pos.getZ() + breadth; z++) {
                     final BlockPos blockPos = new BlockPos(x, y, z);
                     if (!world.getBlockState(blockPos.add(0, 1, 0)).isAir()) continue;
                     world.setBlockState(blockPos, Blocks.CAVE_AIR.getDefaultState(), 3);
@@ -106,8 +106,8 @@ public class TombGenerator {
 
             final int x = this.pos.getX() + width;
 
-            for(int z = this.pos.getZ(); z <= this.pos.getZ() + breadth; z++) {
-                for(int y = this.pos.getY(); y <= this.pos.getY() + height; y++) {
+            for (int z = this.pos.getZ(); z <= this.pos.getZ() + breadth; z++) {
+                for (int y = this.pos.getY(); y <= this.pos.getY() + height; y++) {
                     final BlockPos blockPos = new BlockPos(x, y, z);
                     if (!world.getBlockState(blockPos.add(1, 0, 0)).isAir()) continue;
                     world.setBlockState(blockPos, Blocks.CAVE_AIR.getDefaultState(), 3);
@@ -122,8 +122,8 @@ public class TombGenerator {
 
             final int x = this.pos.getX();
 
-            for(int z = this.pos.getZ(); z <= this.pos.getZ() + breadth; z++) {
-                for(int y = this.pos.getY(); y <= this.pos.getY() + height; y++) {
+            for (int z = this.pos.getZ(); z <= this.pos.getZ() + breadth; z++) {
+                for (int y = this.pos.getY(); y <= this.pos.getY() + height; y++) {
                     final BlockPos blockPos = new BlockPos(x, y, z);
                     if (!world.getBlockState(blockPos.add(-1, 0, 0)).isAir()) continue;
                     world.setBlockState(blockPos, Blocks.CAVE_AIR.getDefaultState(), 3);
