@@ -1,0 +1,138 @@
+{
+  "pools": [
+    {
+      "rolls": 1,
+      "bonus_rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "weight": 1,
+          "name": "minecraft:skeleton_skull",
+          "functions": [
+            {
+              "function": "set_nbt",
+              "tag": "{display:{Name:'{\"text\":\"Beloved \\\\\"Steve\\\\\"\",\"color\":\"dark_gray\"}'}}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "min": 3,
+        "max": 6
+      },
+      "entries": [
+        {
+          "type": "item",
+          "weight": 3,
+          "name": "minecraft:iron_ingot",
+          "quality": 1,
+          "functions": [
+            {
+              "function": "set_count",
+              "count": {
+                "min": 2,
+                "max": 5
+              }
+            }
+          ]
+        },
+        {
+          "type": "item",
+          "weight": 1,
+          "name": "minecraft:iron_pickaxe",
+          "functions": [
+            {
+              "function": "enchant_randomly",
+              "enchantments": [
+                "unbreaking",
+                "mending",
+                "silk_touch",
+                "efficiency"
+              ]
+            },
+            {
+              "function": "set_damage",
+              "damage": {
+                "min": 0.2,
+                "max": 0.7
+              }
+            }
+          ]
+        },
+        {
+          "type": "item",
+          "weight": 1,
+          "name": "minecraft:diamond",
+          "quality": 3,
+          "functions": [
+            {
+              "function": "set_count",
+              "count": {
+                "min": 2,
+                "max": 3
+              }
+            }
+          ]
+        },
+        {
+          "type": "item",
+          "weight": 2,
+          "name": "minecraft:emerald",
+          "quality": 1,
+          "functions": [
+            {
+              "function": "set_count",
+              "count": {
+                "min": 2,
+                "max": 7
+              }
+            }
+          ]
+        },
+        {
+          "type": "item",
+          "weight": 1,
+          "name": "minecraft:ender_pearl",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": {
+                "min": 2,
+                "max": 4
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "min": 0,
+        "max": 1
+      },
+      "bonus_rolls": {
+        "min": 1,
+        "max": 2
+      },
+      "entries": [
+        {
+          "type": "item",
+          "weight": 1,
+          "name": "minecraft:totem_of_undying",
+          "quality": 1,
+          "functions": [
+            {
+              "function": "set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -4,6 +4,7 @@ import fp.yeyu.mcstructures.biomestructures.BiomeStructures;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.LootableContainerBlockEntity;
 import net.minecraft.block.entity.MobSpawnerBlockEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.CompoundTag;
@@ -41,8 +42,25 @@ public class TombGenerator {
     }
 
     public static class Piece extends SimpleStructurePiece {
+        private static final String FLOWER_POT = "flower_pot";
+        private static final String CHEST = "chest";
+        private static final String SPAWNER = "spawner";
+        private static final Block[] FLOWERS = new Block[]{
+                Blocks.POTTED_ALLIUM,
+                Blocks.POTTED_AZURE_BLUET,
+                Blocks.POTTED_BROWN_MUSHROOM,
+                Blocks.POTTED_CORNFLOWER,
+                Blocks.POTTED_LILY_OF_THE_VALLEY};
+        private static final EntityType<?>[] MOB_SPAWNER_ENTITIES = new EntityType[]{
+                EntityType.SKELETON,
+                EntityType.ZOMBIE,
+                EntityType.SPIDER,
+                EntityType.WITCH,
+                EntityType.ENDERMAN
+        };
         private final BlockRotation rotation;
         private final Identifier identifier;
+        private Integer spawnerType;
 
         public Piece(StructureManager structureManager_1, CompoundTag compoundTag_1) {
             super(BiomeStructures.Structures.TOMB.getGenerator(), compoundTag_1);
@@ -136,25 +154,6 @@ public class TombGenerator {
             }
         }
 
-        private static final String FLOWER_POT = "flower_pot";
-        private static final String CHEST = "chest";
-        private static final String SPAWNER = "spawner";
-        private static final Block[] FLOWERS = new Block[]{
-                Blocks.POTTED_ALLIUM,
-                Blocks.POTTED_AZURE_BLUET,
-                Blocks.POTTED_BROWN_MUSHROOM,
-                Blocks.POTTED_CORNFLOWER,
-                Blocks.POTTED_LILY_OF_THE_VALLEY};
-
-        private static final EntityType<?>[] MOB_SPAWNER_ENTITIES = new EntityType[]{
-                EntityType.SKELETON,
-                EntityType.ZOMBIE,
-                EntityType.SPIDER,
-                EntityType.WITCH,
-                EntityType.ENDERMAN
-        };
-
-        private Integer spawnerType;
         @Override
         protected void handleMetadata(String metadata, BlockPos pos, IWorld world, Random random, BlockBox boundingBox) {
             if (Objects.isNull(spawnerType)) {
@@ -167,6 +166,7 @@ public class TombGenerator {
 
             if (metadata.equalsIgnoreCase(CHEST)) {
                 world.setBlockState(pos, Blocks.CHEST.getDefaultState(), 3);
+                LootableContainerBlockEntity.setLootTable(world, random, pos, BiomeStructures.constructIdentifier("tomb_chest"));
                 return;
             }
 
@@ -174,7 +174,7 @@ public class TombGenerator {
                 world.setBlockState(pos, Blocks.SPAWNER.getDefaultState(), 3);
                 final BlockEntity blockEntity = world.getBlockEntity(pos);
                 if (blockEntity instanceof MobSpawnerBlockEntity) {
-                    ((MobSpawnerBlockEntity)blockEntity).getLogic().setEntityId(MOB_SPAWNER_ENTITIES[spawnerType]);
+                    ((MobSpawnerBlockEntity) blockEntity).getLogic().setEntityId(MOB_SPAWNER_ENTITIES[spawnerType]);
                 } else {
                     LOGGER.error("Failed to fetch mob spawner entity at ({}, {}, {})", pos.getX(), pos.getY(), pos.getZ());
                 }
