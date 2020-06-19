@@ -43,8 +43,6 @@ public class CemeteryGenerator implements Generator {
             if (random.nextFloat() < CHANCE) {
                 final Piece cemetery = new Piece(manager, x + distance * (e % row) + random.nextInt(noise), z + distance * (e / row) + random.nextInt(noise), BiomeStructures.constructIdentifier("cemetery"));
                 pieces.add(cemetery);
-            } else {
-                LOGGER.info(String.format("Rejected generation in %d ~ %d", x + distance * (e % row), z + distance * (e / row)));
             }
         });
     }
