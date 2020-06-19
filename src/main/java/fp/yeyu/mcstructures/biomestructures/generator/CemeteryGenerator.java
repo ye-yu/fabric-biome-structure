@@ -1,6 +1,9 @@
 package fp.yeyu.mcstructures.biomestructures.generator;
 
 import fp.yeyu.mcstructures.biomestructures.BiomeStructures;
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.PlantBlock;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.structure.SimpleStructurePiece;
 import net.minecraft.structure.Structure;
@@ -83,7 +86,34 @@ public class CemeteryGenerator implements Generator {
             int yHeight = world.getTopY(Heightmap.Type.WORLD_SURFACE_WG, this.pos.getX(), this.pos.getZ());
             this.pos = this.pos.add(0, yHeight - 1, 0);
             LOGGER.info(String.format("Generated cemetery at %d %d %d", this.pos.getX(), this.pos.getY(), this.pos.getZ()));
-            return super.generate(world, generator, random, box, pos);
+            if (super.generate(world, generator, random, box, pos)) {
+                final int height = this.boundingBox.maxY - this.boundingBox.minY;
+                final int width = this.boundingBox.maxX - this.boundingBox.minX;
+                final int breadth = this.boundingBox.maxZ - this.boundingBox.minZ;
+
+                final Block fillBlock = Blocks.DIRT;
+
+                boolean hasAir = true;
+                for (int y = this.pos.getY() - 1; hasAir; y--) {
+                    for (int x = this.pos.getX(); x <= this.pos.getX() + width; x++) {
+                        for (int z = this.pos.getZ(); z <= this.pos.getZ() + breadth; z++) {
+                            final BlockPos blockPos = new BlockPos(x, y, z);
+                            if (world.isAir(blockPos) || world.getBlockState(blockPos).getBlock() instanceof PlantBlock) {
+                                world.setBlockState(blockPos, fillBlock.getDefaultState(), 3);
+                                hasAir = true;
+                            } else {
+                                hasAir = false;
+                            }
+                        }
+                    }
+                    if (y == 0) {
+                        LOGGER.error("Error in filling air blocks below the cemetery.");
+                        break;
+                    }
+                }
+                return true;
+            }
+            return false;
         }
 
         public void set2dPosition(int x, int z) {
