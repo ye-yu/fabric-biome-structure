@@ -93,29 +93,55 @@ public class CemeteryGenerator implements Generator {
                 final int width = this.boundingBox.maxX - this.boundingBox.minX;
                 final int breadth = this.boundingBox.maxZ - this.boundingBox.minZ;
 
-                final Block fillBlock = Blocks.DIRT;
-
-                boolean hasAir = true;
-                for (int y = this.pos.getY() - 1; hasAir; y--) {
-                    for (int x = this.pos.getX(); x <= this.pos.getX() + width; x++) {
-                        for (int z = this.pos.getZ(); z <= this.pos.getZ() + breadth; z++) {
-                            final BlockPos blockPos = new BlockPos(x, y, z);
-                            if (world.isAir(blockPos) || world.getBlockState(blockPos).getBlock() instanceof PlantBlock) {
-                                world.setBlockState(blockPos, fillBlock.getDefaultState(), 3);
-                                hasAir = true;
-                            } else {
-                                hasAir = false;
-                            }
-                        }
-                    }
-                    if (y == 0) {
-                        LOGGER.error("Error in filling air blocks below the cemetery.");
-                        break;
-                    }
-                }
+                fillBelowWithDirt(world, width, breadth);
+                fillAboveWithAir(world, width, breadth, height);
                 return true;
             }
             return false;
+        }
+
+        private void fillAboveWithAir(IWorld world, int width, int breadth, int height) {
+            final Block fillBlock = Blocks.AIR;
+
+            boolean hasAir = false;
+            for (int y = this.pos.getY() + height + 1; !hasAir; y++) {
+                hasAir = true;
+                for (int x = this.pos.getX(); x <= this.pos.getX() + width; x++) {
+                    for (int z = this.pos.getZ(); z <= this.pos.getZ() + breadth; z++) {
+                        final BlockPos blockPos = new BlockPos(x, y, z);
+                        if (!world.isAir(blockPos)) {
+                            world.setBlockState(blockPos, fillBlock.getDefaultState(), 3);
+                            hasAir = false;
+                        }
+                    }
+                }
+                if (y == 254) {
+                    LOGGER.error("Error in filling air blocks above the cemetery.");
+                    break;
+                }
+            }
+        }
+
+        private void fillBelowWithDirt(IWorld world, int width, int breadth) {
+            final Block fillBlock = Blocks.DIRT;
+
+            boolean hasAir = true;
+            for (int y = this.pos.getY() - 1; hasAir; y--) {
+                hasAir = false;
+                for (int x = this.pos.getX(); x <= this.pos.getX() + width; x++) {
+                    for (int z = this.pos.getZ(); z <= this.pos.getZ() + breadth; z++) {
+                        final BlockPos blockPos = new BlockPos(x, y, z);
+                        if (world.isAir(blockPos) || world.getBlockState(blockPos).getBlock() instanceof PlantBlock) {
+                            world.setBlockState(blockPos, fillBlock.getDefaultState(), 3);
+                            hasAir = true;
+                        }
+                    }
+                }
+                if (y == 0) {
+                    LOGGER.error("Error in filling air blocks below the cemetery.");
+                    break;
+                }
+            }
         }
 
         public void set2dPosition(int x, int z) {
